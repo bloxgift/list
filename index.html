@@ -37,14 +37,27 @@
             margin-bottom: 24px;
         }
 
+        .search-container {
+            position: relative;
+            margin-bottom: 48px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #86868b;
+            pointer-events: none;
+        }
+
         .search-box {
             width: 100%;
-            padding: 16px 20px;
+            padding: 16px 20px 16px 52px;
             font-size: 17px;
             border: none;
             border-radius: 12px;
             background: white;
-            margin-bottom: 48px;
             font-family: inherit;
             transition: box-shadow 0.2s;
         }
@@ -245,7 +258,19 @@
 
         function handleSearch(e) {
             searchTerm = e.target.value.toLowerCase();
+            const cursorPosition = e.target.selectionStart;
+            const scrollPosition = window.scrollY;
+            
             render();
+            
+            requestAnimationFrame(() => {
+                const searchInput = document.querySelector('.search-box');
+                if (searchInput) {
+                    searchInput.focus();
+                    searchInput.setSelectionRange(cursorPosition, cursorPosition);
+                    window.scrollTo(0, scrollPosition);
+                }
+            });
         }
 
         function filteredGroups() {
