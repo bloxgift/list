@@ -37,31 +37,14 @@
             margin-bottom: 24px;
         }
 
-        .search-container {
-            position: relative;
-            margin-bottom: 48px;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            pointer-events: none;
-        }
-        
-        .search-icon circle,
-        .search-icon path {
-            stroke: #86868b;
-        }
-
         .search-box {
             width: 100%;
-            padding: 16px 20px 16px 52px;
+            padding: 16px 20px;
             font-size: 17px;
             border: none;
             border-radius: 12px;
             background: white;
+            margin-bottom: 48px;
             font-family: inherit;
             transition: box-shadow 0.2s;
         }
@@ -93,7 +76,6 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
-            margin-bottom: 60px;
         }
 
         .card {
@@ -263,19 +245,7 @@
 
         function handleSearch(e) {
             searchTerm = e.target.value.toLowerCase();
-            const cursorPosition = e.target.selectionStart;
-            const scrollPosition = window.scrollY;
-            
             render();
-            
-            requestAnimationFrame(() => {
-                const searchInput = document.querySelector('.search-box');
-                if (searchInput) {
-                    searchInput.focus();
-                    searchInput.setSelectionRange(cursorPosition, cursorPosition);
-                    window.scrollTo(0, scrollPosition);
-                }
-            });
         }
 
         function filteredGroups() {
