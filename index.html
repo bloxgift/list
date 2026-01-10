@@ -47,8 +47,12 @@
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
-            color: #86868b;
             pointer-events: none;
+        }
+        
+        .search-icon circle,
+        .search-icon path {
+            stroke: #86868b;
         }
 
         .search-box {
@@ -89,6 +93,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 24px;
+            margin-bottom: 60px;
         }
 
         .card {
