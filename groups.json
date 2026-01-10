@@ -1,0 +1,59 @@
+[
+  {
+    "id": 1,
+    "name": "SkyLine Airways",
+    "shortDescription": "Premium virtual airline experience",
+    "description": "SkyLine Airways is a premier Roblox aviation group offering realistic flight operations, comprehensive training programs, and a professional community of aviation enthusiasts.",
+    "owner": "pilot_master123",
+    "discord": "https://discord.gg/example1",
+    "airports": [
+      "SkyLine International Airport",
+      "Metro City Airport",
+      "Coastal Regional Airport"
+    ],
+    "fleet": [
+      "Boeing 737-800",
+      "Airbus A320neo",
+      "Boeing 787-9 Dreamliner",
+      "Airbus A350-900"
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Atlantic Air",
+    "shortDescription": "Connecting continents daily",
+    "description": "Atlantic Air specializes in long-haul international flights with a focus on passenger comfort and operational excellence. Join our growing community of pilots and cabin crew.",
+    "owner": "aviator_pro",
+    "discord": "https://discord.gg/example2",
+    "airports": [
+      "Atlantic Hub",
+      "Oceanic Gateway",
+      "Island Paradise Airport"
+    ],
+    "fleet": [
+      "Boeing 777-300ER",
+      "Airbus A380",
+      "Boeing 747-8i"
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Regional Express",
+    "shortDescription": "Short-haul specialists",
+    "description": "Regional Express focuses on efficient regional connections with a fleet of modern turboprops and regional jets. Perfect for pilots who enjoy frequent takeoffs and landings.",
+    "owner": "captain_rex",
+    "discord": "https://discord.gg/example3",
+    "airports": [
+      "Downtown Airfield",
+      "Riverside Regional",
+      "Mountain View Airport",
+      "Lake County Airport"
+    ],
+    "fleet": [
+      "ATR 72-600",
+      "Bombardier Q400",
+      "Embraer E175",
+      "CRJ-900"
+    ]
+  }
+]
