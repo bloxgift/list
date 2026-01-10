@@ -34,7 +34,24 @@
         .subtitle {
             font-size: 21px;
             color: #86868b;
+            margin-bottom: 24px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 17px;
+            border: none;
+            border-radius: 12px;
+            background: white;
             margin-bottom: 48px;
+            font-family: inherit;
+            transition: box-shadow 0.2s;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.2);
         }
 
         .back-button {
@@ -72,6 +89,41 @@
         .card:hover {
             transform: translateY(-4px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-card {
+            background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%);
+            color: white;
+            border-radius: 18px;
+            padding: 32px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 200px;
+        }
+
+        .add-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 113, 227, 0.3);
+        }
+
+        .add-card svg {
+            margin-bottom: 16px;
+        }
+
+        .add-card h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .add-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 15px;
         }
 
         .card h2 {
@@ -179,6 +231,7 @@
 
     <script>
         let groups = [];
+        let searchTerm = '';
 
         async function loadGroups() {
             try {
@@ -188,6 +241,20 @@
             } catch (error) {
                 document.getElementById('app').innerHTML = '<p>Error loading groups. Please ensure groups.json exists.</p>';
             }
+        }
+
+        function handleSearch(e) {
+            searchTerm = e.target.value.toLowerCase();
+            render();
+        }
+
+        function filteredGroups() {
+            if (!searchTerm) return groups;
+            return groups.filter(group => 
+                group.name.toLowerCase().includes(searchTerm) ||
+                group.shortDescription.toLowerCase().includes(searchTerm) ||
+                group.description.toLowerCase().includes(searchTerm)
+            );
         }
 
         function getQueryParam(param) {
@@ -212,11 +279,28 @@
         }
 
         function renderListView() {
+            const filtered = filteredGroups();
             return `
                 <h1>Aviation Groups</h1>
                 <p class="subtitle">Explore Roblox aviation communities</p>
+                <input 
+                    type="text" 
+                    class="search-box" 
+                    placeholder="Search groups..." 
+                    value="${searchTerm}"
+                    oninput="handleSearch(event)"
+                >
                 <div class="grid">
-                    ${groups.map(group => `
+                    <div class="add-card" onclick="alert('Contact administrator to submit your group')">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        <h2>Add Your Group</h2>
+                        <p>Submit your aviation group</p>
+                    </div>
+                    ${filtered.map(group => `
                         <div class="card" onclick="window.location.href='?id=${group.id}'">
                             <h2>${group.name}</h2>
                             <p>${group.shortDescription}</p>
