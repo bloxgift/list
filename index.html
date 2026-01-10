@@ -37,14 +37,32 @@
             margin-bottom: 24px;
         }
 
+        /* ✅ Search wrapper to hold icon */
+        .search-wrap {
+            position: relative;
+            width: 100%;
+            margin-bottom: 48px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            color: #86868b;
+            pointer-events: none; /* ✅ clicking icon doesn't steal focus */
+        }
+
         .search-box {
             width: 100%;
             padding: 16px 20px;
+            padding-left: 48px; /* ✅ space for icon */
             font-size: 17px;
             border: none;
             border-radius: 12px;
             background: white;
-            margin-bottom: 48px;
             font-family: inherit;
             transition: box-shadow 0.2s;
         }
@@ -91,6 +109,7 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
         }
 
+        /* ✅ Make add-card an anchor link */
         .add-card {
             background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%);
             color: white;
@@ -104,6 +123,7 @@
             justify-content: center;
             text-align: center;
             min-height: 200px;
+            text-decoration: none; /* ✅ remove underline */
         }
 
         .add-card:hover {
@@ -233,6 +253,9 @@
         let groups = [];
         let searchTerm = '';
 
+        // ✅ change this to whatever link you want
+        const ADD_GROUP_URL = "submit.html";
+
         async function loadGroups() {
             try {
                 const response = await fetch('groups.json');
@@ -243,17 +266,30 @@
             }
         }
 
+        // ✅ keep focus/caret even though we rerender
         function handleSearch(e) {
-            searchTerm = e.target.value.toLowerCase();
-            render();
+            const input = e.target;
+            const caretPos = input.selectionStart ?? input.value.length;
+
+            searchTerm = input.value; // keep exact text; use .toLowerCase() only for filtering
+
+            render(() => {
+                const newInput = document.querySelector('.search-box');
+                if (newInput) {
+                    newInput.focus();
+                    const pos = Math.min(caretPos, newInput.value.length);
+                    newInput.setSelectionRange(pos, pos);
+                }
+            });
         }
 
         function filteredGroups() {
             if (!searchTerm) return groups;
-            return groups.filter(group => 
-                group.name.toLowerCase().includes(searchTerm) ||
-                group.shortDescription.toLowerCase().includes(searchTerm) ||
-                group.description.toLowerCase().includes(searchTerm)
+            const t = searchTerm.toLowerCase();
+            return groups.filter(group =>
+                group.name.toLowerCase().includes(t) ||
+                group.shortDescription.toLowerCase().includes(t) ||
+                group.description.toLowerCase().includes(t)
             );
         }
 
@@ -262,7 +298,8 @@
             return urlParams.get(param);
         }
 
-        function render() {
+        // ✅ optional after-render callback (used to restore focus)
+        function render(afterRender) {
             const groupId = getQueryParam('id');
             const app = document.getElementById('app');
 
@@ -276,6 +313,10 @@
             } else {
                 app.innerHTML = renderListView();
             }
+
+            if (typeof afterRender === 'function') {
+                requestAnimationFrame(afterRender);
+            }
         }
 
         function renderListView() {
@@ -283,15 +324,26 @@
             return `
                 <h1>Aviation Groups</h1>
                 <p class="subtitle">Explore Roblox aviation communities</p>
-                <input 
-                    type="text" 
-                    class="search-box" 
-                    placeholder="Search groups..." 
-                    value="${searchTerm}"
-                    oninput="handleSearch(event)"
-                >
+
+                <div class="search-wrap">
+                    <!-- ✅ SVG search icon -->
+                    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+
+                    <input 
+                        type="text" 
+                        class="search-box" 
+                        placeholder="Search groups..." 
+                        value="${escapeHtml(searchTerm)}"
+                        oninput="handleSearch(event)"
+                    >
+                </div>
+
                 <div class="grid">
-                    <div class="add-card" onclick="alert('Contact administrator to submit your group')">
+                    <!-- ✅ goes to a link now -->
+                    <a class="add-card" href="${ADD_GROUP_URL}">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="12" cy="12" r="10"/>
                             <line x1="12" y1="8" x2="12" y2="16"/>
@@ -299,11 +351,12 @@
                         </svg>
                         <h2>Add Your Group</h2>
                         <p>Submit your aviation group</p>
-                    </div>
+                    </a>
+
                     ${filtered.map(group => `
                         <div class="card" onclick="window.location.href='?id=${group.id}'">
-                            <h2>${group.name}</h2>
-                            <p>${group.shortDescription}</p>
+                            <h2>${escapeHtml(group.name)}</h2>
+                            <p>${escapeHtml(group.shortDescription)}</p>
                             <a href="${group.discord}" class="discord-button" onclick="event.stopPropagation()">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
@@ -325,17 +378,17 @@
                     Back
                 </a>
                 <div class="detail-view">
-                    <h1>${group.name}</h1>
+                    <h1>${escapeHtml(group.name)}</h1>
                     
                     <div class="info-section">
                         <h3>About</h3>
-                        <p>${group.description}</p>
+                        <p>${escapeHtml(group.description)}</p>
                     </div>
 
                     <div class="info-grid">
                         <div class="info-item">
                             <h4>Owner</h4>
-                            <p>${group.owner}</p>
+                            <p>${escapeHtml(group.owner)}</p>
                         </div>
                         <div class="info-item">
                             <h4>Discord</h4>
@@ -351,18 +404,28 @@
                     <div class="info-section">
                         <h3>Airports</h3>
                         <ul class="list-items">
-                            ${group.airports.map(airport => `<li>${airport}</li>`).join('')}
+                            ${group.airports.map(a => `<li>${escapeHtml(a)}</li>`).join('')}
                         </ul>
                     </div>
 
                     <div class="info-section">
                         <h3>Fleet</h3>
                         <ul class="list-items">
-                            ${group.fleet.map(aircraft => `<li>${aircraft}</li>`).join('')}
+                            ${group.fleet.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
                         </ul>
                     </div>
                 </div>
             `;
+        }
+
+        // ✅ prevents breaking HTML if search term/group text contains quotes or < >
+        function escapeHtml(str) {
+            return String(str ?? "")
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
         }
 
         loadGroups();
