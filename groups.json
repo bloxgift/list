@@ -2,6 +2,7 @@
   {
     "id": 1,
     "name": "LeMonde Airlines",
+    "partner": true,
     "shortDescription": "Connecting the World",
     "description": "WiIIkommen bei LeMonde Airlines! LeMonde is your gateway to the world. We will leave you satisfied through the experience and superior quality we give you. Thank you for choosing LeMonde, the airline that creates realistic travel experiences through technology, luxury and comfort.",
     "owner": "TheReal_CatCrafter",
@@ -29,6 +30,7 @@
   {
     "id": 2,
     "name": "Test Airlines",
+    "partner": false,
     "shortDescription": "Connecting the World",
     "description": "WiIIkommen bei LeMonde Airlines! LeMonde is your gateway to the world. We will leave you satisfied through the experience and superior quality we give you. Thank you for choosing LeMonde, the airline that creates realistic travel experiences through technology, luxury and comfort.",
     "owner": "TheReal_CatCrafter",
