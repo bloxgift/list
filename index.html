@@ -4,60 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Discord / Open Graph embed -->
-<meta property="og:title" content="Skydex">
-<meta property="og:description" content="Explore Roblox aviation communities">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://skydex.vercel.app">
-<meta property="og:image" content="https://i.imgur.com/7hM2uDT.png">
+    <meta property="og:title" content="Skydex">
+    <meta property="og:description" content="Explore Roblox aviation communities">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://skydex.vercel.app">
+    <meta property="og:image" content="https://i.imgur.com/7hM2uDT.png">
 
-<!-- Discord uses theme-color for the left color bar -->
-<meta name="theme-color" content="#0067d0">
+    <!-- Discord uses theme-color for the left color bar -->
+    <meta name="theme-color" content="#0067d0">
 
-<!-- Twitter fallback (Discord also reads these sometimes) -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Skydex">
-<meta name="twitter:description" content="Explore Roblox aviation communities">
-<meta name="twitter:image" content="https://i.imgur.com/7hM2uDT.png">
+    <!-- Twitter fallback -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Skydex">
+    <meta name="twitter:description" content="Explore Roblox aviation communities">
+    <meta name="twitter:image" content="https://i.imgur.com/7hM2uDT.png">
 
     <title>Skydex</title>
     <style>
-        * {
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            background: #f5f5f7;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f5f7;
+            background: transparent;
             color: #1d1d1f;
             line-height: 1.5;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+        }
+
+        /* Background: fixed layer so it never jumps or tiles on scroll/mobile */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background:
+                radial-gradient(1100px 560px at 90% -8%, rgba(0, 113, 227, 0.10), transparent 65%),
+                radial-gradient(900px 500px at -10% 8%, rgba(88, 101, 242, 0.07), transparent 65%),
+                linear-gradient(180deg, #f5f7fb 0%, #f5f5f7 55%, #eef0f5 100%);
+        }
+
+        /* Very faint dot grid that fades out toward the bottom */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image: radial-gradient(rgba(29, 29, 31, 0.07) 1px, transparent 1px);
+            background-size: 26px 26px;
+            -webkit-mask-image: linear-gradient(180deg, #000 0%, transparent 60%);
+            mask-image: linear-gradient(180deg, #000 0%, transparent 60%);
         }
 
         .container {
             max-width: 980px;
             margin: 0 auto;
-            padding: 60px 20px;
+            padding: 64px 24px 80px;
         }
 
         h1 {
-            font-size: 48px;
+            font-size: clamp(34px, 6vw, 48px);
             font-weight: 600;
+            line-height: 1.1;
             margin-bottom: 12px;
             letter-spacing: -0.5px;
         }
 
         .subtitle {
-            font-size: 21px;
+            font-size: clamp(17px, 2.6vw, 21px);
             color: #86868b;
-            margin-bottom: 24px;
+            margin-bottom: 28px;
         }
 
-        /* ✅ Search wrapper to hold icon */
         .search-wrap {
             position: relative;
             width: 100%;
-            margin-bottom: 48px;
+            margin-bottom: 40px;
         }
 
         .search-icon {
@@ -68,18 +101,18 @@
             width: 20px;
             height: 20px;
             color: #86868b;
-            pointer-events: none; /* ✅ clicking icon doesn't steal focus */
+            pointer-events: none;
         }
 
         .search-box {
             width: 100%;
-            padding: 16px 20px;
-            padding-left: 48px; /* ✅ space for icon */
+            padding: 16px 20px 16px 48px;
             font-size: 17px;
             border: none;
             border-radius: 12px;
             background: white;
             font-family: inherit;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             transition: box-shadow 0.2s;
         }
 
@@ -98,17 +131,13 @@
             transition: opacity 0.2s;
         }
 
-        .back-button:hover {
-            opacity: 0.7;
-        }
-
-        .back-button svg {
-            margin-right: 6px;
-        }
+        .back-button:hover { opacity: 0.7; }
+        .back-button svg { margin-right: 8px; }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-auto-flow: row dense;
             gap: 24px;
         }
 
@@ -116,6 +145,9 @@
             background: white;
             border-radius: 18px;
             padding: 32px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             transition: transform 0.2s, box-shadow 0.2s;
             cursor: pointer;
         }
@@ -125,7 +157,45 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
         }
 
-        /* ✅ Make add-card an anchor link */
+        .card h2 {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        .card p {
+            color: #86868b;
+            font-size: 17px;
+            margin-bottom: 24px;
+            flex: 1;
+        }
+
+        .title-row {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px 10px;
+            margin-bottom: 8px;
+        }
+
+        .detail-view .title-row { margin-bottom: 24px; }
+        .detail-view .title-row h1 { margin-bottom: 0; }
+
+        /* Partner badge */
+        .partner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(0, 113, 227, 0.1);
+            color: #0071e3;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1;
+            padding: 5px 10px 5px 8px;
+            border-radius: 980px;
+            white-space: nowrap;
+        }
+
         .add-card {
             background: linear-gradient(135deg, #0071e3 0%, #005bb5 100%);
             color: white;
@@ -139,7 +209,7 @@
             justify-content: center;
             text-align: center;
             min-height: 200px;
-            text-decoration: none; /* ✅ remove underline */
+            text-decoration: none;
         }
 
         .add-card:hover {
@@ -147,32 +217,9 @@
             box-shadow: 0 12px 24px rgba(0, 113, 227, 0.3);
         }
 
-        .add-card svg {
-            margin-bottom: 16px;
-        }
-
-        .add-card h2 {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .add-card p {
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 15px;
-        }
-
-        .card h2 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .card p {
-            color: #86868b;
-            font-size: 17px;
-            margin-bottom: 24px;
-        }
+        .add-card svg { margin-bottom: 16px; }
+        .add-card h2 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+        .add-card p { color: rgba(255, 255, 255, 0.8); font-size: 15px; }
 
         .discord-button {
             display: inline-flex;
@@ -188,9 +235,88 @@
             transition: background 0.2s;
         }
 
-        .discord-button:hover {
-            background: #4752c4;
+        .discord-button:hover { background: #4752c4; }
+
+        /* Sponsored card */
+        .ad-card {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            min-height: 220px;
+            padding: 36px 40px;
+            border-radius: 18px;
+            background: #111a2e;
+            color: #fff;
         }
+
+        .ad-detail { margin-top: 24px; }
+
+        .ad-bg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -2;
+        }
+
+        /* Fade: solid on the text side, dimmed image on the other, so text stays readable */
+        .ad-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            background: linear-gradient(90deg,
+                rgba(17, 26, 46, 0.96) 0%,
+                rgba(17, 26, 46, 0.82) 45%,
+                rgba(17, 26, 46, 0.55) 100%);
+        }
+
+        .ad-content { max-width: 540px; }
+
+        .ad-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            line-height: 1;
+            padding: 5px 9px;
+            margin-bottom: 14px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.14);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .ad-card h2 {
+            font-size: 28px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .ad-card p {
+            font-size: 17px;
+            color: rgba(255, 255, 255, 0.78);
+            margin-bottom: 22px;
+        }
+
+        .ad-button {
+            display: inline-block;
+            background: #fff;
+            color: #111a2e;
+            padding: 10px 22px;
+            border-radius: 980px;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .ad-button:hover { background: #e4e8f0; }
 
         .detail-view {
             background: white;
@@ -198,19 +324,13 @@
             padding: 48px;
         }
 
-        .detail-view h1 {
-            margin-bottom: 24px;
-        }
-
-        .info-section {
-            margin-bottom: 32px;
-        }
+        .info-section { margin-top: 32px; }
+        .info-section:first-of-type { margin-top: 0; }
 
         .info-section h3 {
             font-size: 21px;
             font-weight: 600;
             margin-bottom: 12px;
-            color: #1d1d1f;
         }
 
         .info-section p {
@@ -241,15 +361,9 @@
             letter-spacing: 0.5px;
         }
 
-        .info-item p {
-            font-size: 17px;
-            color: #1d1d1f;
-        }
+        .info-item p { font-size: 17px; color: #1d1d1f; overflow-wrap: anywhere; }
 
-        .list-items {
-            list-style: none;
-            margin-top: 12px;
-        }
+        .list-items { list-style: none; margin-top: 4px; }
 
         .list-items li {
             padding: 8px 0;
@@ -257,8 +371,17 @@
             font-size: 17px;
         }
 
-        .list-items li:last-child {
-            border-bottom: none;
+        .list-items li:last-child { border-bottom: none; }
+
+        @media (max-width: 640px) {
+            .container { padding: 40px 16px 56px; }
+            .grid { gap: 16px; }
+            .card, .add-card { padding: 24px; }
+            .card h2 { font-size: 24px; }
+            .detail-view { padding: 28px 22px; }
+            .ad-card { padding: 28px 24px; min-height: 0; }
+            .ad-card::before { background: rgba(17, 26, 46, 0.82); }
+            .ad-card h2 { font-size: 24px; }
         }
     </style>
 </head>
@@ -267,39 +390,102 @@
 
 <script>
   let groups = [];
+  let ads = [];
+  let currentAd = null;
+  let adPosition = 0;
   let searchTerm = '';
 
   const ADD_GROUP_URL = "https://discord.gg/3QsxwE4XMG";
 
-  async function loadGroups() {
+  const DISCORD_ICON = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+    </svg>`;
+
+  const CHECK_ICON = `
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>`;
+
+  async function fetchJson(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(url + ' ' + res.status);
+    return res.json();
+  }
+
+  async function loadData() {
     try {
-      const response = await fetch('groups.json');
-      groups = await response.json();
-      render();
+      groups = await fetchJson('groups.json');
     } catch (error) {
       document.getElementById('app').innerHTML =
         '<p>Error loading groups. Try refreshing the page. Support: discord.gg/3QsxwE4XMG</p>';
+      return;
     }
+
+    // Ads are optional: if the file is missing or broken, the site still works
+    try {
+      ads = await fetchJson('ads.json');
+    } catch (error) {
+      ads = [];
+    }
+
+    if (Array.isArray(ads) && ads.length) {
+      currentAd = ads[Math.floor(Math.random() * ads.length)];
+      // Random slot in the list (after the "Add Your Group" card)
+      adPosition = Math.floor(Math.random() * (groups.length + 1));
+    }
+
+    render();
   }
 
   function handleSearch(e) {
-    searchTerm = e.target.value;        // keep as typed
-    updateGridOnly();                   // ✅ no full render -> no outline flicker
+    searchTerm = e.target.value;
+    updateGridOnly();
   }
 
   function filteredGroups() {
     if (!searchTerm) return groups;
     const t = searchTerm.toLowerCase();
     return groups.filter(group =>
-      group.name.toLowerCase().includes(t) ||
-      group.shortDescription.toLowerCase().includes(t) ||
-      group.description.toLowerCase().includes(t)
+      String(group.name ?? '').toLowerCase().includes(t) ||
+      String(group.shortDescription ?? '').toLowerCase().includes(t) ||
+      String(group.description ?? '').toLowerCase().includes(t)
     );
   }
 
   function getQueryParam(param) {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get(param);
+    return new URLSearchParams(window.location.search).get(param);
+  }
+
+  // Only allow http(s) links
+  function safeUrl(url) {
+    try {
+      const u = new URL(url, window.location.href);
+      return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : '#';
+    } catch {
+      return '#';
+    }
+  }
+
+  function partnerBadge(group) {
+    return group.partner ? `<span class="partner-badge" title="Skydex Partner">${CHECK_ICON}Partner</span>` : '';
+  }
+
+  function renderAd(ad, extraClass = '') {
+    if (!ad) return '';
+    const label = ad.buttonText || 'Learn More';
+    return `
+      <aside class="ad-card ${extraClass}" aria-label="Sponsored">
+        ${ad.image ? `<img class="ad-bg" src="${escapeHtml(safeUrl(ad.image))}" alt="" loading="lazy" onerror="this.remove()">` : ''}
+        <div class="ad-content">
+          <span class="ad-tag">Sponsored</span>
+          <h2>${escapeHtml(ad.title)}</h2>
+          <p>${escapeHtml(ad.description)}</p>
+          <a class="ad-button" href="${escapeHtml(safeUrl(ad.link))}" target="_blank" rel="sponsored noopener noreferrer">${escapeHtml(label)}</a>
+        </div>
+      </aside>
+    `;
   }
 
   function render() {
@@ -307,29 +493,50 @@
     const app = document.getElementById('app');
 
     if (groupId) {
-      const group = groups.find(g => g.id === parseInt(groupId));
-      app.innerHTML = group ? renderDetailView(group) : '<p>Group not found.</p>';
+      const group = groups.find(g => g.id === parseInt(groupId, 10));
+      app.innerHTML = group
+        ? renderDetailView(group)
+        : '<a href="?" class="back-button">&larr; Back</a><p>Group not found.</p>';
+      document.title = group ? `${group.name} | Skydex` : 'Skydex';
       return;
     }
 
-    // ✅ Build the list view ONCE (input stays mounted)
+    document.title = 'Skydex';
     app.innerHTML = renderListShell();
 
-    // ✅ Attach listener once (no inline oninput needed)
     const input = document.getElementById('searchBox');
     input.value = searchTerm;
     input.addEventListener('input', handleSearch);
 
-    // ✅ Initial cards render
     updateGridOnly();
   }
 
-  // ✅ Only updates the cards area
+  function renderCard(group) {
+    return `
+      <div class="card" onclick="window.location.href='?id=${group.id}'">
+        <div class="title-row">
+          <h2>${escapeHtml(group.name)}</h2>
+          ${partnerBadge(group)}
+        </div>
+        <p>${escapeHtml(group.shortDescription)}</p>
+        <a href="${escapeHtml(safeUrl(group.discord))}" class="discord-button" onclick="event.stopPropagation()">
+          ${DISCORD_ICON}
+          Join Discord
+        </a>
+      </div>
+    `;
+  }
+
   function updateGridOnly() {
     const grid = document.getElementById('groupsGrid');
     if (!grid) return;
 
-    const filtered = filteredGroups();
+    const cards = filteredGroups().map(renderCard);
+
+    // Insert the sponsored card at its random slot (clamped when search shrinks the list)
+    if (currentAd) {
+      cards.splice(Math.min(adPosition, cards.length), 0, renderAd(currentAd));
+    }
 
     grid.innerHTML = `
       <a class="add-card" href="${ADD_GROUP_URL}">
@@ -341,57 +548,43 @@
         <h2>Add Your Group</h2>
         <p>Submit your aviation group</p>
       </a>
-
-      ${filtered.map(group => `
-        <div class="card" onclick="window.location.href='?id=${group.id}'">
-          <h2>${escapeHtml(group.name)}</h2>
-          <p>${escapeHtml(group.shortDescription)}</p>
-          <a href="${group.discord}" class="discord-button" onclick="event.stopPropagation()">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-            </svg>
-            Join Discord
-          </a>
-        </div>
-      `).join('')}
+      ${cards.join('')}
     `;
   }
 
-  // ✅ Shell markup (includes SVG icon + input, created once)
   function renderListShell() {
-  return `
-    <h1>Skydex</h1>
-    <p class="subtitle">Explore Roblox aviation communities</p>
+    return `
+      <h1>Skydex</h1>
+      <p class="subtitle">Explore Roblox aviation communities</p>
 
-    <div class="search-wrap">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="7"></circle>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-      </svg>
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="searchBox" type="text" class="search-box" placeholder="Search groups..." autocomplete="off">
+      </div>
 
-      <input
-        id="searchBox"
-        type="text"
-        class="search-box"
-        placeholder="Search groups..."
-      >
-    </div>
-
-    <div class="grid" id="groupsGrid"></div>
-  `;
-}
+      <div class="grid" id="groupsGrid"></div>
+    `;
+  }
 
   function renderDetailView(group) {
+    const airports = group.airports || [];
+    const fleet = group.fleet || [];
     return `
       <a href="?" class="back-button">
-        <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor">
+        <svg width="12" height="20" viewBox="0 0 12 20" fill="currentColor" aria-hidden="true">
           <path d="M10 20L0 10L10 0l1.775 1.775L3.55 10l8.225 8.225z"/>
         </svg>
         Back
       </a>
       <div class="detail-view">
-        <h1>${escapeHtml(group.name)}</h1>
+        <div class="title-row">
+          <h1>${escapeHtml(group.name)}</h1>
+          ${partnerBadge(group)}
+        </div>
 
         <div class="info-section">
           <h3>About</h3>
@@ -405,10 +598,8 @@
           </div>
           <div class="info-item">
             <h4>Discord</h4>
-            <a href="${group.discord}" class="discord-button">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-            </svg>
+            <a href="${escapeHtml(safeUrl(group.discord))}" class="discord-button">
+              ${DISCORD_ICON}
               Join
             </a>
           </div>
@@ -417,17 +608,18 @@
         <div class="info-section">
           <h3>Airports</h3>
           <ul class="list-items">
-            ${group.airports.map(a => `<li>${escapeHtml(a)}</li>`).join('')}
+            ${airports.map(a => `<li>${escapeHtml(a)}</li>`).join('')}
           </ul>
         </div>
 
         <div class="info-section">
           <h3>Fleet</h3>
           <ul class="list-items">
-            ${group.fleet.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
+            ${fleet.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
           </ul>
         </div>
       </div>
+      ${renderAd(currentAd, 'ad-detail')}
     `;
   }
 
@@ -440,7 +632,7 @@
       .replaceAll("'", "&#039;");
   }
 
-  loadGroups();
+  loadData();
 </script>
 
 </body>
