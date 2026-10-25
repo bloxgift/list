@@ -54,5 +54,116 @@
       "GJ Q400",
       "H160"
     ]
+  },{
+    "id": 3,
+    "name": "LeMonde Airlines",
+    "partner": true,
+    "shortDescription": "Connecting the World",
+    "description": "WiIIkommen bei LeMonde Airlines! LeMonde is your gateway to the world. We will leave you satisfied through the experience and superior quality we give you. Thank you for choosing LeMonde, the airline that creates realistic travel experiences through technology, luxury and comfort.",
+    "owner": "TheReal_CatCrafter",
+    "discord": "https://discord.gg/lemonde",
+    "airports": [
+      "Munich International Airport",
+      "Amrum Airport",
+      "Jena International Airport",
+      "and more..."
+    ],
+    "fleet": [
+      "A380-800",
+      "A220-300",
+      "A320neo",
+      "A350-900",
+      "B737-800",
+      "CRJ 300",
+      "GJ A318",
+      "GJ A320",
+      "GJ B737-800",
+      "GJ Q400",
+      "H160"
+    ]
+  },
+  {
+    "id": 4,
+    "name": "Test Airlines",
+    "partner": false,
+    "shortDescription": "Connecting the World",
+    "description": "WiIIkommen bei LeMonde Airlines! LeMonde is your gateway to the world. We will leave you satisfied through the experience and superior quality we give you. Thank you for choosing LeMonde, the airline that creates realistic travel experiences through technology, luxury and comfort.",
+    "owner": "TheReal_CatCrafter",
+    "discord": "https://discord.gg/lemonde",
+    "airports": [
+      "Munich International Airport",
+      "Amrum Airport",
+      "Jena International Airport",
+      "and more..."
+    ],
+    "fleet": [
+      "A380-800",
+      "A220-300",
+      "A320neo",
+      "A350-900",
+      "B737-800",
+      "CRJ 300",
+      "GJ A318",
+      "GJ A320",
+      "GJ B737-800",
+      "GJ Q400",
+      "H160"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "LeMonde Airlines",
+    "partner": true,
+    "shortDescription": "Connecting the World",
+    "description": "WiIIkommen bei LeMonde Airlines! LeMonde is your gateway to the world. We will leave you satisfied through the experience and superior quality we give you. Thank you for choosing LeMonde, the airline that creates realistic travel experiences through technology, luxury and comfort.",
+    "owner": "TheReal_CatCrafter",
+    "discord": "https://discord.gg/lemonde",
+    "airports": [
+      "Munich International Airport",
+      "Amrum Airport",
+      "Jena International Airport",
+      "and more..."
+    ],
+    "fleet": [
+      "A380-800",
+      "A220-300",
+      "A320neo",
+      "A350-900",
+      "B737-800",
+      "CRJ 300",
+      "GJ A318",
+      "GJ A320",
+      "GJ B737-800",
+      "GJ Q400",
+      "H160"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Test Airlines",
+    "partner": false,
+    "shortDescription": "Connecting the World",
+    "description": "WiIIkommen bei LeMonde Airlines! LeMonde is your gateway to the world. We will leave you satisfied through the experience and superior quality we give you. Thank you for choosing LeMonde, the airline that creates realistic travel experiences through technology, luxury and comfort.",
+    "owner": "TheReal_CatCrafter",
+    "discord": "https://discord.gg/lemonde",
+    "airports": [
+      "Munich International Airport",
+      "Amrum Airport",
+      "Jena International Airport",
+      "and more..."
+    ],
+    "fleet": [
+      "A380-800",
+      "A220-300",
+      "A320neo",
+      "A350-900",
+      "B737-800",
+      "CRJ 300",
+      "GJ A318",
+      "GJ A320",
+      "GJ B737-800",
+      "GJ Q400",
+      "H160"
+    ]
   }
 ]
